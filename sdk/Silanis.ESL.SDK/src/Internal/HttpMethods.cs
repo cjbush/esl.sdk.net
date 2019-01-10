@@ -6,6 +6,7 @@ using System.Reflection;
 using Silanis.ESL.SDK;
 using System.Text;
 using System.Security.Authentication;
+using System.Configuration;
 
 namespace Silanis.ESL.SDK.Internal
 {
@@ -64,7 +65,7 @@ namespace Silanis.ESL.SDK.Internal
                     byte [] result = memoryStream.ToArray ();
                     return result;
                 }
-            } catch (WebException e) {
+            } catch (WebException e) when (e.Response != null) {
                 using (var stream = e.Response.GetResponseStream ())
                 using (var reader = new StreamReader (stream)) {
                     string errorDetails = reader.ReadToEnd ();
@@ -179,14 +180,13 @@ namespace Silanis.ESL.SDK.Internal
 
         public static byte [] GetHttp (string path, IDictionary<string, string> headers)
         {
-            string message = "";
-            UseUnsafeHeaderParsing (ref message);
             try {
                 System.Net.ServicePointManager.SecurityProtocol = (SecurityProtocolType)768 | (SecurityProtocolType)3072;
 
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create (path);
                 request.Method = "GET";
                 AddAdditionalHeaders (request, headers);
+                request.Headers.Add("Accept-Language", "en-US;q=1, en;q=0.9");
                 request.Accept = ESL_ACCEPT_TYPE_APPLICATION_JSON;
                 SetProxy (request);
 
@@ -210,48 +210,6 @@ namespace Silanis.ESL.SDK.Internal
             } catch (Exception e) {
                 throw new EslException ("Error communicating with esl server. " + e.Message, e);
             }
-        }
-
-        public static bool UseUnsafeHeaderParsing(ref string strError)
-        {
-            Assembly assembly = Assembly.GetAssembly(typeof(System.Net.Configuration.SettingsSection));
-            if (null == assembly)
-            {
-                strError = "Could not access Assembly";
-                return false;
-            }
-
-            Type type = assembly.GetType("System.Net.Configuration.SettingsSectionInternal");
-            if (null == type)
-            {
-                strError = "Could not access internal settings";
-                return false;
-            }
-
-            object obj = type.InvokeMember("Section",
-                                           BindingFlags.Static | BindingFlags.GetProperty | BindingFlags.NonPublic,
-                                           null, null, new object[] { });
-
-            if (null == obj)
-            {
-                strError = "Could not invoke Section member";
-                return false;
-            }
-
-            // If it's not already set, set it.
-            FieldInfo fi = type.GetField("useUnsafeHeaderParsing", BindingFlags.NonPublic | BindingFlags.Instance);
-            if (null == fi)
-            {
-                strError = "Could not access useUnsafeHeaderParsing field";
-                return false;
-            }
-
-            if (!Convert.ToBoolean(fi.GetValue(obj)))
-            {
-                fi.SetValue(obj, true);
-            }
-
-            return true;
         }
 
         public static DownloadedFile GetHttpJson (string apiToken, string path, string acceptType)

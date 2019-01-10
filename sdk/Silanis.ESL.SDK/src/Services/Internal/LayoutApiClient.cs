@@ -3,6 +3,7 @@ using Silanis.ESL.SDK.Internal;
 using Newtonsoft.Json;
 using Silanis.ESL.API;
 using System.Web;
+using System.Net;
 
 namespace Silanis.ESL.SDK
 {
@@ -120,7 +121,7 @@ namespace Silanis.ESL.SDK
             string path = template.UrlFor(UrlTemplate.APPLY_LAYOUT_BY_NAME_PATH)
                 .Replace("{packageId}", packageId)
                 .Replace("{documentId}", documentId)
-                .Replace("{layoutName}", HttpUtility.UrlEncode(layoutName))
+                .Replace("{layoutName}", WebUtility.UrlEncode(layoutName))
                 .Build();
 
             try

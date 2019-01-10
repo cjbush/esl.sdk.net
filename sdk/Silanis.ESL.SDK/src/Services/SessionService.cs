@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Web;
 using Newtonsoft.Json;
 using Silanis.ESL.SDK.Internal;
@@ -51,7 +52,7 @@ namespace Silanis.ESL.SDK.Services
 
 			string path = template.UrlFor (UrlTemplate.SESSION_PATH)
                 .Replace ("{packageId}", packageId.Id)
-                .Replace ("{signerId}", HttpUtility.UrlEncode(signerId))
+                .Replace ("{signerId}", WebUtility.UrlEncode(signerId))
                 .Build ();
 
 			try {

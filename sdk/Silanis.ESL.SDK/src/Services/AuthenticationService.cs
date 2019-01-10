@@ -4,6 +4,7 @@ using Silanis.ESL.SDK.Internal;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Text;
+using System.Net;
 
 namespace Silanis.ESL.SDK
 {
@@ -44,7 +45,7 @@ namespace Silanis.ESL.SDK
                 string redirectPath = webpageTemplate.UrlFor(UrlTemplate.DESIGNER_REDIRECT_PATH)
                         .Replace("{packageId}", packageId.Id)
                         .Build();
-                string encodedRedirectPath = HttpUtility.UrlEncode(redirectPath);
+                string encodedRedirectPath = WebUtility.UrlEncode(redirectPath);
                 string path = authenticationTemplate.UrlFor(UrlTemplate.AUTHENTICATION_PATH_FOR_USER_AUTHENTICATION_TOKEN_WITH_REDIRECT)
                         .Replace("{authenticationToken}", userAuthenticationToken)
                         .Replace("{redirectUrl}", encodedRedirectPath)
@@ -79,7 +80,7 @@ namespace Silanis.ESL.SDK
                 string redirectPath = webpageTemplate.UrlFor(UrlTemplate.DESIGNER_REDIRECT_PATH)
                         .Replace("{packageId}", packageId.Id)
                         .Build();
-                string encodedRedirectPath = HttpUtility.UrlEncode(redirectPath);
+                string encodedRedirectPath = WebUtility.UrlEncode(redirectPath);
                 string path = authenticationTemplate.UrlFor(UrlTemplate.AUTHENTICATION_PATH_FOR_SENDER_AUTHENTICATION_TOKEN_WITH_REDIRECT)
                         .Replace("{senderAuthenticationToken}", senderAuthenticationToken)
                         .Replace("{redirectUrl}", encodedRedirectPath)
@@ -97,7 +98,7 @@ namespace Silanis.ESL.SDK
                 string redirectPath = webpageTemplate.UrlFor(UrlTemplate.PACKAGE_VIEW_REDIRECT_PATH)
                     .Replace("{packageId}", packageId.Id)
                         .Build();
-                string encodedRedirectPath = HttpUtility.UrlEncode(redirectPath);
+                string encodedRedirectPath = WebUtility.UrlEncode(redirectPath);
                 string path = authenticationTemplate.UrlFor(UrlTemplate.AUTHENTICATION_PATH_FOR_USER_AUTHENTICATION_TOKEN_WITH_REDIRECT)
                     .Replace("{authenticationToken}", userAuthenticationToken)
                         .Replace("{redirectUrl}", encodedRedirectPath)
@@ -134,7 +135,7 @@ namespace Silanis.ESL.SDK
                 string redirectPath = webpageTemplate.UrlFor(UrlTemplate.SIGNING_REDIRECT_PATH)
                         .Replace("{packageId}", packageId.Id)
                         .Build();
-                string encodedRedirectPath = HttpUtility.UrlEncode(redirectPath);
+                string encodedRedirectPath = WebUtility.UrlEncode(redirectPath);
                 string path = authenticationTemplate.UrlFor(UrlTemplate.AUTHENTICATION_PATH_FOR_SIGNER_AUTHENTICATION_TOKEN_WITH_REDIRECT)
                         .Replace("{signerAuthenticationToken}", signerAuthenticationToken)
                         .Replace("{redirectUrl}", encodedRedirectPath)
